@@ -1,342 +1,342 @@
 # IIoT Edge Gateway
 
 <p align="center">
-  <strong>Industrial IoT Edge Gateway</strong><br>
-  EMQX Neuron-level data acquisition, protocol conversion and edge computing platform
+  <strong>Промышленный IoT Edge Gateway</strong><br>
+  Платформа сбора данных, преобразования протоколов и граничных вычислений уровня EMQX Neuron
 </p>
 
 <p align="center">
-  <img src="docs/screenshots/01-dashboard.png" alt="Dashboard" width="800">
+  <img src="docs/screenshots/01-dashboard.png" alt="Панель управления" width="800">
 </p>
 
 ---
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Лицензия: MIT](https://img.shields.io/badge/Лицензия-MIT-blue.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?logo=typescript)](https://www.typescriptlang.org/)
 [![Next.js](https://img.shields.io/badge/Next.js-16-000000?logo=next.js)](https://nextjs.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss)](https://tailwindcss.com/)
-[![Protocols](https://img.shields.io/badge/Protocols-30%2B-orange)](#protocol-support)
-[![Templates](https://img.shields.io/badge/Device_Templates-90%2B-green)](#device-templates)
+[![Протоколы](https://img.shields.io/badge/Протоколы-30%2B-orange)](#поддержка-протоколов)
+[![Шаблоны](https://img.shields.io/badge/Шаблоны_устройств-90%2B-green)](#шаблоны-устройств)
 
 ---
 
-## Overview
+## Обзор
 
-IIoT Edge Gateway is a comprehensive industrial IoT edge computing platform designed for data acquisition, protocol conversion, and real-time data processing. Built with modern web technologies, it provides an intuitive web-based HMI/SCADA interface for managing southbound devices (PLCs, sensors, actuators) and northbound applications (cloud connectors, historians, message brokers).
+IIoT Edge Gateway — это комплексная платформа промышленного интернета вещей (IoT) для граничных вычислений, предназначенная для сбора данных, преобразования протоколов и обработки данных в реальном времени. Построенная на современных веб-технологиях, она предоставляет интуитивный веб-интерфейс HMI/SCADA для управления южными устройствами (ПЛК, датчиками, исполнительными механизмами) и северными приложениями (облачными коннекторами, историками, брокерами сообщений).
 
-The platform follows the **EMQX Neuron architecture** and implements the **OPA-S (Open Platform Architecture - South)** specification for protocol driver management.
+Платформа следует **архитектуре EMQX Neuron** и реализует спецификацию **OPA-S (Open Platform Architecture — South)** для управления драйверами протоколов.
 
-## Features
+## Возможности
 
-### Protocol Support (30+ Drivers)
+### Поддержка протоколов (30+ драйверов)
 
-| Category | Protocols |
-|----------|-----------|
-| **Serial** | Modbus TCP, Modbus RTU, Modbus ASCII, HART, HART-IP |
-| **Industrial PLCs** | Siemens S7, Allen-Bradley (EtherNet/IP), Omron FINS, Mitsubishi MELSEC |
-| **Process Automation** | OPC UA, IEC 60870-5-104, DNP3, IEC 61850 |
-| **Building Automation** | BACnet/IP, KNX |
-| **Network** | SNMP v1/v2c/v3 |
-| **Cloud / Northbound** | MQTT v5, Apache Kafka, HTTP REST, WebSocket, AWS IoT Core, Azure IoT Hub |
-
-<p align="center">
-  <img src="docs/screenshots/09-drivers.png" alt="OPA-S Protocol Drivers" width="800">
-</p>
-
-### South Device Management
-
-- **90+ Device Templates** across 12 categories (PLCs, VFDs, sensors, I/O modules, power meters, gateways)
-- **Template-based device creation** — select a manufacturer/model and auto-generate register maps
-- **Real-time tag monitoring** with quality indicators (Good/Bad/Uncertain) and sparkline history
-- **Import/Export** device configurations as JSON
-- **Serial & TCP** connection support with configurable timeouts, retries, byte order
+| Категория | Протоколы |
+|-----------|-----------|
+| **Последовательные** | Modbus TCP, Modbus RTU, Modbus ASCII, HART, HART-IP |
+| **Промышленные ПЛК** | Siemens S7, Allen-Bradley (EtherNet/IP), Omron FINS, Mitsubishi MELSEC |
+| **Автоматизация процессов** | OPC UA, IEC 60870-5-104, DNP3, IEC 61850 |
+| **Автоматизация зданий** | BACnet/IP, KNX |
+| **Сетевые** | SNMP v1/v2c/v3 |
+| **Облачные / Северные** | MQTT v5, Apache Kafka, HTTP REST, WebSocket, AWS IoT Core, Azure IoT Hub |
 
 <p align="center">
-  <img src="docs/screenshots/02-south-devices.png" alt="South Devices" width="800">
+  <img src="docs/screenshots/09-drivers.png" alt="Драйверы протоколов OPA-S" width="800">
 </p>
 
-### Data Tags
+### Управление южными устройствами
 
-- **Full tag lifecycle management** — create, configure, monitor, write values
-- **Data types**: BOOL, INT16, UINT16, INT32, UINT32, FLOAT32, STRING
-- **Register types**: Holding Register, Input Register, Coil, Discrete Input
-- **Alarm configuration** per tag with thresholds, deadband, and delay
-- **Real-time value simulation** with quality tracking and trend indicators
+- **90+ шаблонов устройств** из 12 категорий (ПЛК, частотные преобразователи, датчики, модули ввода/вывода, счётчики, шлюзы)
+- **Создание устройств из шаблонов** — выберите производителя/модель и автоматически получите карту регистров
+- **Мониторинг тегов в реальном времени** с индикаторами качества (Хорошо/Плохо/Неопределено) и мини-графиками истории
+- **Импорт/Экспорт** конфигураций устройств в формате JSON
+- **Поддержка последовательных и TCP** соединений с настраиваемыми тайм-аутами, повторами, порядком байтов
 
 <p align="center">
-  <img src="docs/screenshots/04-tags.png" alt="Data Tags" width="800">
+  <img src="docs/screenshots/02-south-devices.png" alt="Южные устройства" width="800">
 </p>
 
-### Pipeline Processing
+### Теги данных
 
-- **Visual node-based pipeline editor** with drag-and-drop
-- **13 node types**: South Device Source, Tag Reader, Data Transform, Filter, Aggregator, Script, MQTT Publish, HTTP Push, Kafka Producer, WebSocket, Logger, Alarm Check, Delay
-- **8 pipeline templates** for common data flow patterns
-- **SVG animated connections** with directional arrows and glow effects
-- **Test run simulation** with sequential processing log
+- **Полное управление жизненным циклом тегов** — создание, настройка, мониторинг, запись значений
+- **Типы данных**: BOOL, INT16, UINT16, INT32, UINT32, FLOAT32, STRING
+- **Типы регистров**: Holding Register, Input Register, Coil, Discrete Input
+- **Конфигурация аварийных сигналов** для каждого тега с порогами, зоной нечувствительности и задержкой
+- **Симуляция значений в реальном времени** с отслеживанием качества и индикаторами тренда
 
 <p align="center">
-  <img src="docs/screenshots/05-pipeline.png" alt="Pipeline Editor" width="800">
+  <img src="docs/screenshots/04-tags.png" alt="Теги данных" width="800">
 </p>
 
-### Northbound Applications (13 Templates)
+### Конвейерная обработка данных
 
-- **MQTT** — Eclipse Mosquitto, EMQX, HiveMQ (including blue-traktor.ru:1888)
-- **Historians** — InfluxDB, TimescaleDB, OSIsoft PI System
-- **Streaming** — Apache Kafka, AWS Kinesis
-- **Cloud** — AWS IoT Core, Azure IoT Hub, Google Cloud IoT
-- **Integration** — HTTP REST Push, WebSocket Stream
-- **Enterprise** — SAP, OPC UA Server
+- **Визуальный узловой редактор конвейеров** с перетаскиванием
+- **13 типов узлов**: Источник южного устройства, Чтение тега, Преобразование данных, Фильтр, Агрегатор, Скрипт, MQTT Publish, HTTP Push, Kafka Producer, WebSocket, Логгер, Проверка аварий, Задержка
+- **8 шаблонов конвейеров** для типичных схем потока данных
+- **Анимированные SVG-соединения** с направленными стрелками и эффектом свечения
+- **Симуляция тестового запуска** с последовательным журналом обработки
 
 <p align="center">
-  <img src="docs/screenshots/03-north-apps.png" alt="North Applications" width="800">
+  <img src="docs/screenshots/05-pipeline.png" alt="Редактор конвейеров" width="800">
 </p>
 
-### Real-Time Monitoring
+### Северные приложения (13 шаблонов)
 
-- **WebSocket streaming** for live tag values and system metrics
-- **SVG circular gauges** for CPU, Memory, Network utilization
-- **Sparkline charts** per tag (last 20 data points)
-- **Alarm ticker** with severity color coding (Critical/Warning/Info)
-- **Connection status panel** with live health indicators
-- **Fallback simulation** when WebSocket is unavailable
+- **MQTT** — Eclipse Mosquitto, EMQX, HiveMQ (включая blue-traktor.ru:1888)
+- **Историки** — InfluxDB, TimescaleDB, OSIsoft PI System
+- **Потоковая передача** — Apache Kafka, AWS Kinesis
+- **Облако** — AWS IoT Core, Azure IoT Hub, Google Cloud IoT
+- **Интеграция** — HTTP REST Push, WebSocket Stream
+- **Корпоративные системы** — SAP, OPC UA Server
 
 <p align="center">
-  <img src="docs/screenshots/07-monitoring.png" alt="Real-Time Monitoring" width="800">
+  <img src="docs/screenshots/03-north-apps.png" alt="Северные приложения" width="800">
 </p>
 
-### Diagnostics
+### Мониторинг в реальном времени
 
-- **Modbus TCP Tester** — read/write registers and coils, register map browser
-- **MQTT Tester** — publish/subscribe, topic tree browser, message history
-- **System Health** — simultaneous health checks for all mini-services with response times
-- **Action history log** with request/response timing
+- **Потоковая передача по WebSocket** для живых значений тегов и метрик системы
+- **Круговые SVG-датчики** для утилизации CPU, памяти, сети
+- **Мини-графики** для каждого тега (последние 20 точек данных)
+- **Бегущая строка аварий** с цветовой кодировкой по серьёзности (Критично/Внимание/Информация)
+- **Панель состояния соединений** с живыми индикаторами здоровья
+- **Резервная симуляция** при недоступности WebSocket
 
 <p align="center">
-  <img src="docs/screenshots/08-diagnostics.png" alt="Diagnostics" width="800">
+  <img src="docs/screenshots/07-monitoring.png" alt="Мониторинг в реальном времени" width="800">
 </p>
 
-### OPC UA Client
+### Диагностика
 
-- **Connection management** with security modes (None/Sign/SignAndEncrypt)
-- **Information model browser** — hierarchical tree with standard OPC UA node structure
-- **Node detail panel** — references, value display, alarm thresholds, history sparkline
-- **Subscriptions** — create/manage subscriptions with monitored items
-- **Namespace support** — ns0 (OPC UA), ns1 (Application), ns2 (Machine), ns3 (Security)
+- **Тестер Modbus TCP** — чтение/запись регистров и катушек, просмотр карты регистров
+- **Тестер MQTT** — публикация/подписка, просмотр дерева тем, история сообщений
+- **Здоровье системы** — одновременная проверка всех мини-сервисов с отображением времени отклика
+- **Журнал действий** с замерами времени запрос/ответ
 
 <p align="center">
-  <img src="docs/screenshots/10-opcua.png" alt="OPC UA Client" width="800">
+  <img src="docs/screenshots/08-diagnostics.png" alt="Диагностика" width="800">
 </p>
 
-### Alarm Management
+### OPC UA Клиент
 
-- **Active alarms** with severity levels (Critical, Warning, Info) and acknowledge workflow
-- **Alarm rules** — configurable thresholds, conditions, deadband, delay
-- **Alarm history** — full event log with trigger, acknowledge, and clear timestamps
+- **Управление подключениями** с режимами безопасности (Нет/Подпись/ПодписьИШифрование)
+- **Браузер информационной модели** — иерархическое дерево со стандартной структурой узлов OPC UA
+- **Панель детализации узла** — ссылки, отображение значений, пороги аварий, мини-графики истории
+- **Подписки** — создание/управление подписками с отслеживаемыми элементами
+- **Поддержка пространств имён** — ns0 (OPC UA), ns1 (Приложение), ns2 (Машина), ns3 (Безопасность)
 
 <p align="center">
-  <img src="docs/screenshots/06-alarms.png" alt="Alarm Management" width="800">
+  <img src="docs/screenshots/10-opcua.png" alt="OPC UA Клиент" width="800">
 </p>
 
-### Industrial RBAC (Role-Based Access Control)
+### Управление авариями
 
-- **7 hierarchical roles** (L1 Operator → L7 Super Admin)
-- **37 fine-grained permissions** across 12 categories
-- **Visual permission matrix** for easy role management
-- **User management** with role assignment, status control, activity tracking
-
-### 4-Tier Licensing
-
-| Tier | Devices | Tags | Protocols | Features |
-|------|---------|------|-----------|----------|
-| **Free** | 5 | 50 | Modbus, MQTT | Basic monitoring |
-| **Standard** | 25 | 500 | + OPC UA, BACnet | Alarms, pipelines, REST API |
-| **Professional** | 100 | 5000 | + Siemens, AB, SNMP | OPC UA server, scripting, HA |
-| **Enterprise** | Unlimited | Unlimited | All | PI System, SSO, audit, priority support |
+- **Активные аварии** с уровнями серьёзности (Критично, Внимание, Информация) и рабочим процессом квитирования
+- **Правила аварий** — настраиваемые пороги, условия, зона нечувствительности, задержка
+- **Журнал аварий** — полный журнал событий с метками времени срабатывания, квитирования и сброса
 
 <p align="center">
-  <img src="docs/screenshots/12-settings-license.png" alt="License Management" width="800">
+  <img src="docs/screenshots/06-alarms.png" alt="Управление авариями" width="800">
 </p>
 
-### Security
+### Промышленная RBAC (управление доступом на основе ролей)
 
-- **Password policy** — minimum length, complexity requirements
-- **IP whitelist** — restrict access by IP ranges
-- **2FA support** (configuration available)
-- **API key management** — generate, rotate, revoke
-- **Audit logging** — full action log with timestamps and user tracking
-- **Security policy** — [SECURITY.md](SECURITY.md)
+- **7 иерархических ролей** (L1 Оператор → L7 Суперадминистратор)
+- **37 детальных разрешений** в 12 категориях
+- **Визуальная матрица разрешений** для удобного управления ролями
+- **Управление пользователями** с назначением ролей, контролем статуса, отслеживанием активности
+
+### 4-уровневое лицензирование
+
+| Уровень | Устройства | Теги | Протоколы | Возможности |
+|---------|------------|------|-----------|-------------|
+| **Free** | 5 | 50 | Modbus, MQTT | Базовый мониторинг |
+| **Standard** | 25 | 500 | + OPC UA, BACnet | Аварии, конвейеры, REST API |
+| **Professional** | 100 | 5 000 | + Siemens, AB, SNMP | OPC UA сервер, скрипты, HA |
+| **Enterprise** | Без ограничений | Без ограничений | Все | PI System, SSO, аудит, приоритетная поддержка |
 
 <p align="center">
-  <img src="docs/screenshots/11-settings.png" alt="Settings" width="800">
+  <img src="docs/screenshots/12-settings-license.png" alt="Управление лицензиями" width="800">
 </p>
 
-### Dark Mode
+### Безопасность
+
+- **Политика паролей** — минимальная длина, требования к сложности
+- **Белый список IP** — ограничение доступа по диапазонам IP-адресов
+- **Поддержка 2FA** (двухфакторной аутентификации, конфигурация доступна)
+- **Управление API-ключами** — генерация, ротация, отзыв
+- **Журнал аудита** — полный журнал действий с метками времени и отслеживанием пользователей
+- **Политика безопасности** — [SECURITY.md](SECURITY.md)
 
 <p align="center">
-  <img src="docs/screenshots/13-dashboard-dark.png" alt="Dark Mode" width="800">
+  <img src="docs/screenshots/11-settings.png" alt="Настройки" width="800">
 </p>
 
-## Architecture
+### Тёмная тема
+
+<p align="center">
+  <img src="docs/screenshots/13-dashboard-dark.png" alt="Тёмная тема" width="800">
+</p>
+
+## Архитектура
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│                    Web HMI (Next.js 16)                  │
-│  Dashboard │ Devices │ Tags │ Pipelines │ Monitoring     │
-│  Alarms │ Diagnostics │ Drivers │ OPC UA │ Settings      │
-└──────────────────────┬──────────────────────────────────┘
-                       │ REST API / WebSocket
-┌──────────────────────┴──────────────────────────────────┐
-│                   Edge Gateway Core                      │
-│  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌──────────────┐  │
-│  │ Modbus   │ │ OPC UA  │ │ BACnet  │ │  Pipeline    │  │
-│  │ Engine   │ │ Client  │ │ Stack   │ │  Engine      │  │
-│  └────┬────┘ └────┬────┘ └────┬────┘ └──────┬───────┘  │
-│       │           │           │               │          │
-│  ┌────┴───────────┴───────────┴───────────────┴───────┐ │
-│  │              Tag Processing Engine                   │ │
-│  │         JSON-LD Flat Data Model (OPA-S)             │ │
-│  └──────────────────────┬──────────────────────────────┘ │
-│                         │                                │
-│  ┌──────────────────────┴──────────────────────────────┐ │
-│  │           Northbound Connectors                     │ │
-│  │  MQTT │ Kafka │ HTTP │ PI System │ AWS │ Azure     │ │
-│  └─────────────────────────────────────────────────────┘ │
-└─────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│                     Web HMI (Next.js 16)                    │
+│  Панель │ Устройства │ Теги │ Конвейеры │ Мониторинг        │
+│  Аварии │ Диагностика │ Драйверы │ OPC UA │ Настройки       │
+└────────────────────────┬────────────────────────────────────┘
+                         │ REST API / WebSocket
+┌────────────────────────┴────────────────────────────────────┐
+│                    Ядро Edge Gateway                         │
+│  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌──────────────┐      │
+│  │ Modbus  │ │ OPC UA  │ │ BACnet  │ │  Конвейерный  │      │
+│  │ Движок  │ │ Клиент  │ │ Стек    │ │    Движок     │      │
+│  └────┬────┘ └────┬────┘ └────┬────┘ └──────┬───────┘      │
+│       │           │           │               │               │
+│  ┌────┴───────────┴───────────┴───────────────┴──────────┐  │
+│  │            Движок обработки тегов                      │  │
+│  │       Плоская модель данных JSON-LD (OPA-S)            │  │
+│  └─────────────────────┬──────────────────────────────────┘  │
+│                        │                                     │
+│  ┌─────────────────────┴──────────────────────────────────┐  │
+│  │            Северные коннекторы                          │  │
+│  │  MQTT │ Kafka │ HTTP │ PI System │ AWS │ Azure         │  │
+│  └────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────┘
          │              │              │
     ┌────┴────┐   ┌────┴────┐   ┌────┴────┐
-    │  PLCs   │   │ Sensors │   │ Cloud   │
-    │  RTUs   │   │ Actuators│  │ SCADA   │
+    │  ПЛК    │   │ Датчики │   │ Облако  │
+    │  ТУ     │   │ Механизмы│  │ SCADA   │
     └─────────┘   └─────────┘   └─────────┘
 ```
 
-## Tech Stack
+## Технологический стек
 
-| Technology | Purpose |
-|-----------|---------|
-| **Next.js 16** | React framework (App Router, Turbopack) |
-| **TypeScript 5** | Type-safe development |
-| **Tailwind CSS 4** | Utility-first styling |
-| **shadcn/ui** | Component library |
-| **Recharts** | Data visualization |
-| **Lucide Icons** | Icon system |
-| **Prisma ORM** | Database layer |
-| **SQLite** | Embedded database |
-| **WebSocket** | Real-time communication |
-| **Zustand** | Client state management |
-| **TanStack Query** | Server state management |
+| Технология | Назначение |
+|-----------|------------|
+| **Next.js 16** | React-фреймворк (App Router, Turbopack) |
+| **TypeScript 5** | Типобезопасная разработка |
+| **Tailwind CSS 4** | Утилитарный подход к стилизации |
+| **shadcn/ui** | Библиотека компонентов |
+| **Recharts** | Визуализация данных |
+| **Lucide Icons** | Система иконок |
+| **Prisma ORM** | Слой базы данных |
+| **SQLite** | Встраиваемая база данных |
+| **WebSocket** | Обмен данными в реальном времени |
+| **Zustand** | Управление клиентским состоянием |
+| **TanStack Query** | Управление серверным состоянием |
 
-## Mini-Services
+## Мини-сервисы
 
-The gateway includes 3 independent microservices for development and testing:
+Шлюз включает 3 независимых микросервиса для разработки и тестирования:
 
-| Service | Port | Description |
-|---------|------|-------------|
-| **Modbus TCP Simulator** | 8502 | Full Modbus TCP server with 10,000 registers, coils, discrete inputs. REST API for read/write operations. Industrial value simulation. |
-| **WebSocket Broker** | 8503 | Real-time data streaming with 18 simulated tags. Channels: tags, metrics, alarms, status. |
-| **MQTT Bridge** | 8504 | MQTT pub/sub simulation with topic tree, retained messages, subscriptions, message history. |
+| Сервис | Порт | Описание |
+|--------|------|----------|
+| **Симулятор Modbus TCP** | 8502 | Полноценный сервер Modbus TCP с 10 000 регистров, катушками, дискретными входами. REST API для операций чтения/записи. Симуляция промышленных значений. |
+| **WebSocket Брокер** | 8503 | Потоковая передача данных в реальном времени с 18 симулированными тегами. Каналы: теги, метрики, аварии, статус. |
+| **MQTT Мост** | 8504 | Симуляция MQTT pub/sub с деревом тем, сохранёнными сообщениями, подписками, историей сообщений. |
 
-## Getting Started
+## Быстрый старт
 
-### Prerequisites
+### Предварительные требования
 
-- [Bun](https://bun.sh/) (v1.0+) or Node.js 18+
+- [Bun](https://bun.sh/) (v1.0+) или Node.js 18+
 - Git
 
-### Installation
+### Установка
 
 ```bash
-# Clone the repository
+# Клонировать репозиторий
 git clone https://github.com/KuzinHouse/IIoT-Edge-Gateway.git
 cd IIoT-Edge-Gateway
 
-# Install dependencies
+# Установить зависимости
 bun install
 
-# Initialize database
+# Инициализировать базу данных
 bun run db:push
 
-# Start the application
+# Запустить приложение
 bun run dev
 ```
 
-### Mini-Services (optional)
+### Мини-сервисы (опционально)
 
 ```bash
-# Start all mini-services
+# Запустить все мини-сервисы
 cd mini-services/modbus-simulator && bun run dev &
 cd mini-services/ws-broker && bun run dev &
 cd mini-services/mqtt-bridge && bun run dev &
 ```
 
-The application will be available at `http://localhost:3000`.
+Приложение будет доступно по адресу `http://localhost:3000`.
 
-## Project Structure
+## Структура проекта
 
 ```
 IIoT-Edge-Gateway/
 ├── src/
 │   ├── app/                    # Next.js App Router
-│   │   ├── page.tsx           # Main application shell
-│   │   ├── layout.tsx         # Root layout with theme provider
-│   │   ├── globals.css        # Global styles
-│   │   └── api/               # REST API routes
-│   │       ├── alarms/        # Alarm management API
-│   │       ├── connections/   # Connection management API
-│   │       ├── dashboard/     # Dashboard statistics API
-│   │       ├── devices/       # Device CRUD API
-│   │       ├── drivers/       # Protocol drivers API
-│   │       ├── flows/         # Pipeline flows API
-│   │       ├── jsonld/        # JSON-LD data model API
-│   │       ├── license/       # License management API
-│   │       ├── north-apps/    # Northbound apps API
-│   │       ├── tags/          # Data tags API
-│   │       └── users/         # User management API
+│   │   ├── page.tsx           # Основной каркас приложения
+│   │   ├── layout.tsx         # Корневой layout с провайдером темы
+│   │   ├── globals.css        # Глобальные стили
+│   │   └── api/               # REST API маршруты
+│   │       ├── alarms/        # API управления авариями
+│   │       ├── connections/   # API управления соединениями
+│   │       ├── dashboard/     # API статистики панели управления
+│   │       ├── devices/       # API CRUD устройств
+│   │       ├── drivers/       # API драйверов протоколов
+│   │       ├── flows/         # API конвейеров
+│   │       ├── jsonld/        # API модели данных JSON-LD
+│   │       ├── license/       # API управления лицензиями
+│   │       ├── north-apps/    # API северных приложений
+│   │       ├── tags/          # API тегов данных
+│   │       └── users/         # API управления пользователями
 │   ├── components/
-│   │   ├── views/             # Main application views (10)
-│   │   │   ├── DashboardView.tsx
-│   │   │   ├── SouthDevicesView.tsx
-│   │   │   ├── NorthAppsView.tsx
-│   │   │   ├── TagsView.tsx
-│   │   │   ├── PipelineView.tsx
-│   │   │   ├── AlarmsView.tsx
-│   │   │   ├── MonitoringView.tsx
-│   │   │   ├── DiagnosticsView.tsx
-│   │   │   ├── DriversView.tsx
-│   │   │   ├── OPCUAView.tsx
-│   │   │   └── SettingsView.tsx
-│   │   ├── flows/             # Pipeline flow components
-│   │   ├── tags/              # Tag display components
-│   │   ├── ui/                # shadcn/ui components (50+)
-│   │   └── CommandPalette.tsx # Ctrl+K command palette
-│   ├── hooks/                 # Custom React hooks
-│   ├── i18n/                  # Internationalization (EN/RU)
+│   │   ├── views/             # Основные экраны приложения (11)
+│   │   │   ├── DashboardView.tsx       # Панель управления
+│   │   │   ├── SouthDevicesView.tsx    # Южные устройства
+│   │   │   ├── NorthAppsView.tsx       # Северные приложения
+│   │   │   ├── TagsView.tsx            # Теги данных
+│   │   │   ├── PipelineView.tsx        # Конвейеры
+│   │   │   ├── AlarmsView.tsx          # Аварии
+│   │   │   ├── MonitoringView.tsx      # Мониторинг
+│   │   │   ├── DiagnosticsView.tsx     # Диагностика
+│   │   │   ├── DriversView.tsx         # Драйверы OPA-S
+│   │   │   ├── OPCUAView.tsx           # OPC UA Клиент
+│   │   │   └── SettingsView.tsx        # Настройки
+│   │   ├── flows/             # Компоненты конвейеров
+│   │   ├── tags/              # Компоненты отображения тегов
+│   │   ├── ui/                # Компоненты shadcn/ui (50+)
+│   │   └── CommandPalette.tsx # Палитра команд Ctrl+K
+│   ├── hooks/                 # Пользовательские React-хуки
+│   ├── i18n/                  # Интернационализация (EN/RU)
 │   ├── lib/
-│   │   ├── modbus-templates.ts    # 90+ device templates (4378 lines)
-│   │   ├── protocol-registry.ts   # 30+ protocol definitions
-│   │   ├── pipeline-templates.tsx # 8 pipeline templates
-│   │   ├── north-app-templates.ts # 13 northbound app templates
-│   │   ├── jsonld-model.ts        # JSON-LD flat data model
-│   │   └── ...                    # Utilities, services, DB client
-│   └── types/                 # TypeScript type definitions
-├── mini-services/             # Independent microservices
-│   ├── modbus-simulator/      # Modbus TCP Simulator (port 8502)
-│   ├── ws-broker/             # WebSocket Broker (port 8503)
-│   └── mqtt-bridge/           # MQTT Bridge (port 8504)
+│   │   ├── modbus-templates.ts    # 90+ шаблонов устройств (4378 строк)
+│   │   ├── protocol-registry.ts   # 30+ определений протоколов
+│   │   ├── pipeline-templates.tsx # 8 шаблонов конвейеров
+│   │   ├── north-app-templates.ts # 13 шаблонов северных приложений
+│   │   ├── jsonld-model.ts        # Плоская модель данных JSON-LD
+│   │   └── ...                    # Утилиты, сервисы, клиент БД
+│   └── types/                 # Определения типов TypeScript
+├── mini-services/             # Независимые микросервисы
+│   ├── modbus-simulator/      # Симулятор Modbus TCP (порт 8502)
+│   ├── ws-broker/             # WebSocket Брокер (порт 8503)
+│   └── mqtt-bridge/           # MQTT Мост (порт 8504)
 ├── prisma/
-│   └── schema.prisma          # Database schema
+│   └── schema.prisma          # Схема базы данных
 ├── docs/
-│   └── screenshots/           # Project screenshots
-├── ARCHITECTURE.md            # Architecture documentation (950 lines)
-├── DEPLOYMENT.md              # Deployment guide (810 lines)
-├── SECURITY.md                # Security policy
-├── LICENSE                    # MIT License
-└── README.md                  # This file
+│   └── screenshots/           # Скриншоты проекта
+├── ARCHITECTURE.md            # Документация по архитектуре (950 строк)
+├── DEPLOYMENT.md              # Руководство по развёртыванию (810 строк)
+├── SECURITY.md                # Политика безопасности
+├── LICENSE                    # Лицензия MIT
+└── README.md                  # Этот файл
 ```
 
-## Data Model
+## Модель данных
 
-All internal data flows through a **JSON-LD flat data model** compliant with the OPA-S specification:
+Все внутренние данные проходят через **плоскую модель данных JSON-LD**, соответствующую спецификации OPA-S:
 
 ```json
 {
@@ -354,27 +354,27 @@ All internal data flows through a **JSON-LD flat data model** compliant with the
 }
 ```
 
-## License
+## Лицензия
 
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+Этот проект распространяется под лицензией **MIT** — подробности в файле [LICENSE](LICENSE).
 
-## Contributing
+## Участие в разработке
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+1. Сделайте fork репозитория
+2. Создайте ветку с функционалом (`git checkout -b feature/amazing-feature`)
+3. Закоммитьте изменения (`git commit -m 'Добавлена новая возможность'`)
+4. Отправьте в ветку (`git push origin feature/amazing-feature`)
+5. Откройте Pull Request
 
-## Support
+## Поддержка проекта
 
-If you find this project useful, please consider supporting its development:
+Если этот проект оказался вам полезен, поддержите его развитие:
 
-- **GitHub Sponsors**: [Sponsor this project](https://github.com/sponsors/KuzinHouse)
+- **GitHub Sponsors**: [Спонсировать проект](https://github.com/sponsors/KuzinHouse)
 - **Boosty**: [boosty.to/iiot-edge-gateway](https://boosty.to/iiot-edge-gateway)
 
 ---
 
 <p align="center">
-  Built with ❤️ for the Industrial IoT community
+  Создано с ❤️ для сообщества Промышленного IoT
 </p>
