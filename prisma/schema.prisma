@@ -1,0 +1,528 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:../db/custom.db"
+}
+
+// ============================================================================
+// USER MANAGEMENT
+// ============================================================================
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  password  String?
+  avatar    String?
+  isActive  Boolean  @default(true)
+  lastLogin DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+
+  roles        UserRole[]
+  auditLogs    AuditLog[]
+  acknowledged AlarmHistory[]
+
+  @@index([email])
+  @@index([isActive])
+}
+
+model Role {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  deletedAt   DateTime?
+
+  users       UserRole[]
+  permissions RolePermission[]
+
+  @@index([name])
+}
+
+model Permission {
+  id        String @id @default(cuid())
+  resource  String
+  action    String
+  createdAt DateTime @default(now())
+
+  roles RolePermission[]
+
+  @@unique([resource, action])
+}
+
+model UserRole {
+  id     String @id @default(cuid())
+  userId String
+  roleId String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, roleId])
+}
+
+model RolePermission {
+  id           String @id @default(cuid())
+  roleId       String
+  permissionId String
+  createdAt    DateTime @default(now())
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@unique([roleId, permissionId])
+}
+
+// ============================================================================
+// DEVICES & CONNECTIONS
+// ============================================================================
+
+model Device {
+  id           String   @id @default(cuid())
+  name         String
+  description  String?
+  slaveId      Int      @default(1)
+  host         String?
+  port         Int      @default(502)
+  status       String   @default("unknown") // online, offline, error, unknown
+  deviceType   String   @default("plc") // plc, sensor, actuator, meter, etc.
+  manufacturer String?
+  model        String?
+  firmware     String?
+  serialNumber String?
+  isActive     Boolean  @default(true)
+  connectionId String?
+  lastSeen     DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  deletedAt    DateTime?
+
+  connection Connection?  @relation(fields: [connectionId], references: [id])
+  tags       Tag[]
+  alarms     Alarm[]
+
+  @@index([status])
+  @@index([isActive])
+  @@index([connectionId])
+}
+
+model Connection {
+  id             String   @id @default(cuid())
+  name           String   @unique
+  description    String?
+  type           String   @default("tcp") // tcp, rtu, ascii
+  host           String?
+  port           Int      @default(502)
+  path           String? // serial port path
+  baudRate       Int      @default(9600)
+  dataBits       Int      @default(8)
+  stopBits       Float    @default(1)
+  parity         String   @default("none")
+  timeout        Int      @default(5000)
+  retries        Int      @default(3)
+  pollInterval   Int      @default(1000)
+  autoReconnect  Boolean  @default(true)
+  status         String   @default("disconnected") // connected, disconnected, connecting, error
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  deletedAt      DateTime?
+
+  devices  Device[]
+  tags    Tag[]
+
+  @@index([status])
+  @@index([type])
+}
+
+// ============================================================================
+// TAGS & VALUES
+// ============================================================================
+
+model Tag {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  address     String
+  tagType     String   @default("holding") // coil, discrete, holding, input
+  dataType    String   @default("INT16") // BOOL, INT16, UINT16, INT32, UINT32, FLOAT, DOUBLE, STRING
+  access      String   @default("read") // read, write, readWrite
+  unit        String?
+  scale       Float    @default(1)
+  offset      Float    @default(0)
+  group       String?
+  scanRate    Int      @default(1000)
+  isActive    Boolean  @default(true)
+  deviceId    String
+  connectionId String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  deletedAt   DateTime?
+
+  device    Device      @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+  connection Connection? @relation(fields: [connectionId], references: [id])
+  values      TagValue[]
+  alarmRules  AlarmRule[]
+  unsTopics   UNSTopicTag[]
+
+  @@index([deviceId])
+  @@index([group])
+  @@index([tagType])
+}
+
+model TagValue {
+  id          String   @id @default(cuid())
+  tagId       String
+  value       String
+  rawValue    String?
+  quality     String   @default("good") // good, bad, uncertain
+  qualityCode Int      @default(192)
+  source      String   @default("poll")
+  notes       String?
+  timestamp   DateTime @default(now())
+  createdAt   DateTime @default(now())
+
+  tag Tag @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@index([tagId, timestamp])
+  @@index([timestamp])
+}
+
+// ============================================================================
+// ALARMS
+// ============================================================================
+
+model Alarm {
+  id               String    @id @default(cuid())
+  name             String
+  description      String?
+  severity         String    @default("warning") // critical, warning, info
+  state            String    @default("normal") // active, acknowledged, cleared, normal
+  isActive         Boolean   @default(false)
+  isAcknowledged   Boolean   @default(false)
+  triggeredAt      DateTime?
+  triggerValue     String?
+  triggerMessage   String?
+  acknowledgedAt   DateTime?
+  acknowledgedBy   String?
+  clearedAt        DateTime?
+  deviceId         String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  deletedAt        DateTime?
+
+  device Device?      @relation(fields: [deviceId], references: [id], onDelete: SetNull)
+  rules  AlarmRule[]
+  history AlarmHistory[]
+
+  @@index([state])
+  @@index([isActive])
+  @@index([severity])
+}
+
+model AlarmRule {
+  id          String  @id @default(cuid())
+  alarmId     String
+  tagId       String
+  condition   String  // >, <, ==, !=, >=, <=
+  setpoint    Float
+  deadband    Float?
+  delay       Int?
+  enabled     Boolean @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  alarm Alarm @relation(fields: [alarmId], references: [id], onDelete: Cascade)
+  tag   Tag   @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@index([enabled])
+}
+
+model AlarmHistory {
+  id          String   @id @default(cuid())
+  alarmId     String
+  eventType   String   // triggered, acknowledged, cleared
+  oldState    String?
+  newState    String?
+  value       String?
+  message     String?
+  userId      String?
+  notes       String?
+  timestamp   DateTime @default(now())
+
+  alarm Alarm?  @relation(fields: [alarmId], references: [id], onDelete: Cascade)
+  user  User?   @relation(fields: [userId], references: [id])
+
+  @@index([alarmId, timestamp])
+  @@index([eventType])
+}
+
+// ============================================================================
+// FLOWS (DATA PIPELINE)
+// ============================================================================
+
+model Flow {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  status      String   @default("stopped") // running, stopped, error
+  isPublished Boolean  @default(false)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  deletedAt   DateTime?
+
+  nodes FlowNode[]
+  edges FlowEdge[]
+
+  @@index([status])
+  @@index([isPublished])
+}
+
+model FlowNode {
+  id             String   @id @default(cuid())
+  flowId         String
+  type           String
+  label          String
+  x              Float
+  y              Float
+  config         String?  // JSON config
+  executionOrder Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  flow Flow @relation(fields: [flowId], references: [id], onDelete: Cascade)
+
+  @@index([flowId])
+}
+
+model FlowEdge {
+  id          String @id @default(cuid())
+  flowId      String
+  source      String
+  sourceHandle String
+  target      String
+  targetHandle String
+  createdAt   DateTime @default(now())
+
+  flow Flow @relation(fields: [flowId], references: [id], onDelete: Cascade)
+
+  @@index([flowId])
+}
+
+// ============================================================================
+// DRIVERS
+// ============================================================================
+
+model Driver {
+  id          String   @id @default(cuid())
+  name        String
+  version     String?
+  protocol    String
+  status      String   @default("stopped")
+  enabled     Boolean  @default(true)
+  config      String?
+  lastError   String?
+  uptime      Int?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  deletedAt   DateTime?
+
+  @@index([protocol])
+  @@index([enabled])
+}
+
+// ============================================================================
+// EDGE COMPUTING
+// ============================================================================
+
+model EdgePipeline {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  category    String
+  runtime     String   @default("nodejs")
+  code        String?
+  status      String   @default("stopped")
+  isActive    Boolean  @default(true)
+  memory      Int?
+  cpu         Float?
+  timeout     Int      @default(5000)
+  retries     Int      @default(3)
+  lastRun     DateTime?
+  runCount    Int      @default(0)
+  errorCount  Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  deletedAt   DateTime?
+
+  @@index([category])
+  @@index([status])
+}
+
+// ============================================================================
+// UNS (UNIFIED NAMESPACE) / MQTT TOPICS
+// ============================================================================
+
+model UNSTopic {
+  id          String   @id @default(cuid())
+  path        String   @unique
+  description String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  deletedAt   DateTime?
+
+  tags UNSTopicTag[]
+
+  @@index([path])
+}
+
+model UNSTopicTag {
+  id             String  @id @default(cuid())
+  topicId        String
+  tagId          String
+  publishEnabled Boolean @default(true)
+  alias          String?
+
+  topic UNSTopic @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  tag   Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@unique([topicId, tagId])
+}
+
+// ============================================================================
+// NOTIFICATION CHANNELS
+// ============================================================================
+
+model NotificationChannel {
+  id          String   @id @default(cuid())
+  name        String
+  type        String   // email, sms, telegram, webhook, mqtt
+  config      String?  // JSON config
+  enabled     Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  deletedAt   DateTime?
+}
+
+// ============================================================================
+// SCHEDULED TASKS
+// ============================================================================
+
+model ScheduledTask {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  cronExpr    String?
+  interval    Int?
+  taskType    String
+  config      String?  // JSON config
+  status      String   @default("stopped") // running, stopped, error
+  lastRun     DateTime?
+  nextRun     DateTime?
+  runCount    Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  deletedAt   DateTime?
+
+  @@index([status])
+}
+
+// ============================================================================
+// LICENSE
+// ============================================================================
+
+model License {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  type        String   @default("trial")
+  owner       String?
+  organization String?
+  email       String?
+  isActive    Boolean  @default(true)
+  isExpired   Boolean  @default(false)
+  maxDevices Int      @default(10)
+  maxTags    Int      @default(100)
+  maxConnections Int  @default(5)
+  maxUsers   Int      @default(5)
+  purchaseDate DateTime?
+  activationDate DateTime?
+  expiresAt   DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([isActive, isExpired])
+}
+
+// ============================================================================
+// AUDIT LOG
+// ============================================================================
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  userId      String?
+  action      String
+  resource    String
+  resourceId  String?
+  oldValues   String?
+  newValues   String?
+  ipAddress   String?
+  userAgent   String?
+  description String?
+  status      String   @default("success") // success, failure
+  errorMessage String?
+  createdAt   DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id])
+
+  @@index([resource, resourceId])
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
+}
+
+// ============================================================================
+// PERFORMANCE METRICS
+// ============================================================================
+
+model PerformanceMetric {
+  id          String   @id @default(cuid())
+  metricType  String
+  metricName  String
+  value       Float
+  unit        String?
+  source      String?
+  metadata    String?
+  timestamp   DateTime @default(now())
+  createdAt   DateTime @default(now())
+
+  @@index([metricType, metricName])
+  @@index([timestamp])
+}
+
+// ============================================================================
+// SYSTEM CONFIG
+// ============================================================================
+
+model SystemConfig {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  value       String?
+  valueType   String   @default("string")
+  description String?
+  isPublic    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([key])
+}
